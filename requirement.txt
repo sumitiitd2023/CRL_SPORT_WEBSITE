@@ -1,0 +1,6 @@
+flask
+pandas
+openpyxl
+xlrd==1.2.0
+Werkzeug==2.0.3
+

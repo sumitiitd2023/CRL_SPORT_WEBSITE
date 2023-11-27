@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Result</title>
+</head>
+<body>
+    <h1>Search Result</h1>
+
+    {% if not_found %}
+        <p>Staff ID not found.</p>
+    {% else %}
+        <p>Staff ID: {{ staff_id }}</p>
+        <p>Name: {{ data.name }}</p>
+        <p>Position: {{ data.position }}</p>
+        <p>Salary: {{ data.salary }}</p>
+
+        <h2>Update Information</h2>
+        <form action="/update" method="post">
+            <input type="hidden" name="staff_id" value="{{ staff_id }}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ data.name }}" required>
+            <label for="position">Position:</label>
+            <input type="text" id="position" name="position" value="{{ data.position }}" required>
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary" value="{{ data.salary }}" required>
+            <button type="submit">Update</button>
+        </form>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Random Teams</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='team.css') }}">
+</head>
+<body>
+    <h1>Create Random Teams</h1>
+    <form action="/process" method="post" enctype="multipart/form-data">
+        <label for="file">Upload Excel File:</label>
+        <input type="file" name="file" accept=".xls, .xlsx" required>
+        <label for="num_teams">Number of Teams:</label>
+        <input type="number" name="num_teams" min="1" required>
+        <button type="submit">Create Random Teams</button>
+    </form>
+    <form action="/games" >
+        <button type="submit">Go Back to Home</button>
+    </form>
+</body>
+</html>

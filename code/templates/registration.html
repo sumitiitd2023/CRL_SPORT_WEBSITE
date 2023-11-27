@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Event Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registration.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Game Event Registration</h2>
+        <form action="/registration" method="post">
+            <label for="staff_number">Staff Number:</label>
+            <select name="staff_number" required>
+                {% for staff_number, staff_name in staff_names %}
+                    <option value="{{ staff_number }}">{{ staff_number }}</option>
+                {% endfor %}
+            </select>
+
+<!--            <label for="staff_name">Staff Name:</label>-->
+<!--            <input type="text" name="staff_name" readonly>-->
+
+            <label>Indoor Games:</label>
+            <div class="games-container">
+                <input type="checkbox" name="indoor_games" value="table_tennis"> Table Tennis
+                <input type="checkbox" name="indoor_games" value="fun_game"> Fun Game
+            </div>
+
+            <label>Outdoor Games:</label>
+            <div class="games-container">
+                <input type="checkbox" name="outdoor_games" value="cricket_men"> Cricket Men
+                <input type="checkbox" name="outdoor_games" value="cricket_women"> Cricket Women
+                <input type="checkbox" name="outdoor_games" value="throwball"> Throwball
+                <input type="checkbox" name="outdoor_games" value="volleyball"> Volleyball
+                <input type="checkbox" name="outdoor_games" value="badminton"> Badminton
+                <input type="checkbox" name="outdoor_games" value="tug_of_war"> Tug of War
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        {% if user_info %}
+            <div class="registration-info">
+                <h3>Registration Information:</h3>
+                <p><strong>Staff Number:</strong> {{ user_info.staff_number }}</p>
+                <p><strong>Staff Name:</strong> {{ user_info.name }}</p>
+                <p><strong>Indoor Games:</strong> {% for game in user_info.indoor_games %} {{ game }}, {% endfor %}</p>
+                <p><strong>Outdoor Games:</strong> {% for game in user_info.outdoor_games %} {{ game }}, {% endfor %}</p>
+            </div>
+
+            {% if updated %}
+                <p class="update-message">Registration information updated successfully!</p>
+            {% endif %}
+
+            <form action="/update" method="post">
+                <input type="hidden" name="staff_number" value="{{ user_info.staff_number }}">
+                <button type="submit">Update Registration</button>
+            </form>
+            <form action="/games">
+                <input type="hidden" name="staff_number" value="{{ user_info.staff_number }}">
+                <button type="submit">Back to Home</button>
+            </form>
+        {% endif %}
+
+    </div>
+
+    <script>
+        // Script to update staff name when staff number is selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const staffNumberSelect = document.querySelector('select[name="staff_number"]');
+            const staffNameInput = document.querySelector('input[name="staff_name"]');
+
+            staffNumberSelect.addEventListener('change', function() {
+                // Make an AJAX request to get user information
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `/get_staff_info?staff_number=${staffNumberSelect.value}`, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const staffInfo = JSON.parse(xhr.responseText);
+                        if (staffInfo) {
+                            staffNameInput.value = staffInfo.staff_name;
+                        } else {
+                            staffNameInput.value = '';
+                        }
+                    }
+                };
+                xhr.send();
+            });
+        });
+    </script>
+</body>
+</html>
